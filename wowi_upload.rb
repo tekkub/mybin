@@ -4,72 +4,31 @@ require 'net/http'
 require 'uri'
 require 'digest/md5'
 require 'xmlsimple'
+require 'rubygems'
+require 'mime/types'
+#~ require 'cgi'
 
 
 #########################
 ##      Multipart      ##
 #########################
 
-module Multipart
-  # From: http://deftcode.com/code/flickr_upload/multipartpost.rb
-  ## Helper class to prepare an HTTP POST request with a file upload
-  ## Mostly taken from
-  #http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/113774
-  ### WAS:
-  ## Anything that's broken and wrong probably the fault of Bill Stilwell
-  ##(bill@marginalia.org)
-  ### NOW:
-  ## Everything wrong is due to keith@oreilly.com
-  require 'rubygems'
-  require 'mime/types'
-  require 'net/http'
-  require 'cgi'
+BOUNDARY = 'tek-likes-bear-dick-314'
+HEADER = {"Content-type" => "multipart/form-data, boundary=#{BOUNDARY} "}
 
-  class Param
-    attr_accessor :k, :v
-    def initialize( k, v )
-      @k = k
-      @v = v
-    end
+def prepare_query(params)
+	query = ""
+	params.each do |k,v|
+		if v.respond_to?(:read)
+			query << %Q|\r\n--#{BOUNDARY}\r\nContent-Disposition: form-data; name="#{k}"; filename="#{v.path}"\r\nContent-Transfer-Encoding: binary\r\nContent-Type: #{MIME::Types.type_for(v.path)}\r\n\r\n#{v.read}\r\n|
+		else
+			query << %Q|--#{BOUNDARY}\r\nContent-Disposition: form-data; name="#{k}"\r\n\r\n#{v}\r\n|
+		end
+	end
 
-    def to_multipart
-      #return "Content-Disposition: form-data; name=\"#{CGI::escape(k)}\"\r\n\r\n#{v}\r\n"
-      # Don't escape mine...
-      return "Content-Disposition: form-data; name=\"#{k}\"\r\n\r\n#{v}\r\n"
-    end
-  end
+	query << "--#{BOUNDARY}--"
 
-  class FileParam
-    attr_accessor :k, :filename, :content
-    def initialize( k, filename, content )
-      @k = k
-      @filename = filename
-      @content = content
-    end
-
-    def to_multipart
-      #return "Content-Disposition: form-data; name=\"#{CGI::escape(k)}\"; filename=\"#{filename}\"\r\n" + "Content-Transfer-Encoding: binary\r\n" + "Content-Type: #{MIME::Types.type_for(@filename)}\r\n\r\n" + content + "\r\n "
-      # Don't escape mine
-      return "Content-Disposition: form-data; name=\"#{k}\"; filename=\"#{filename}\"\r\n" + "Content-Transfer-Encoding: binary\r\n" + "Content-Type: #{MIME::Types.type_for(@filename)}\r\n\r\n" + content + "\r\n"
-    end
-  end
-  class MultipartPost
-    BOUNDARY = 'tarsiers-rule0000'
-    HEADER = {"Content-type" => "multipart/form-data, boundary=" + BOUNDARY + " "}
-
-    def prepare_query (params)
-      fp = []
-      params.each {|k,v|
-        if v.respond_to?(:read)
-          fp.push(FileParam.new(k, v.path, v.read))
-        else
-          fp.push(Param.new(k,v))
-        end
-      }
-      query = fp.collect {|p| "--" + BOUNDARY + "\r\n" + p.to_multipart }.join("") + "--" + BOUNDARY + "--"
-      return query, HEADER
-    end
-  end
+	return query, HEADER
 end
 
 ######################
@@ -167,8 +126,7 @@ Net::HTTP.start("www.wowinterface.com") do |http|
 		"replacementfile" => file,
 	}
 
-	mp = Multipart::MultipartPost.new
-	query, headers = mp.prepare_query(params)
+	query, headers = prepare_query(params)
 	file.close
 
 	res = http.post("/downloads/editfile.php", query, headers)
