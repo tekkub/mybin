@@ -57,6 +57,7 @@ do
 	sed "s/\(.*\)Version: .*/\1Version: $version/" $toc > newtoc
 	mv newtoc $toc
 	git-add $toc
+	sleep 1
 done
 
 textile_to_wowi.rb > /c/Users/Tekkub/Desktop/$addon-$version-description.txt
