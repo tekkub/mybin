@@ -78,7 +78,7 @@ end
 github = "Alpha builds can be found on [url=#{github_project}]github[/url].\n"
 pledgie = "\n\n[URL='#{pledgie_url}'][IMG]#{pledgie_img}[/IMG][/URL]"
 [
-	[/<b>(Visit .* mailinglist)<\/b>/m, '[SIZE=2][B][COLOR=SandyBrown]\1[/COLOR][/B][/SIZE]'],
+	[/<b>(Visit .* mailinglist).?<\/b>/m, '[SIZE=2][B][COLOR=SandyBrown]\1[/COLOR][/B][/SIZE]'],
 	[/<p\s?[^>]*>/, ''],
 	["</p>", ''],
 	[/<div\s?[^>]*>/, ''],
@@ -90,6 +90,7 @@ pledgie = "\n\n[URL='#{pledgie_url}'][IMG]#{pledgie_img}[/IMG][/URL]"
 	[/h2\. (.*)/, '[size=3][b]\1[/b][/size]'],
 	[/<b>(.*)<\/b>/, '[B]\1[/B]'],
 	#~ [/\*([^*]*)\*/, '[B]\1[/B]'],
+	[/<em>(.*)<\/em>/, '[I]\1[/I]'],
 	[/<i>(.*)<\/i>/, '[I]\1[/I]'],
 	#~ [/_([^_]*)_/, '[I]\1[/I]'],
 	[/<u>(.*)<\/u>/, '[U]\1[/U]'],
