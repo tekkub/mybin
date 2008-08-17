@@ -43,7 +43,7 @@ unless username && password
 end
 
 
-addon_name, new_version, zip_file, changelog_file, description_file = $*
+addon_name, new_version, zip_file, changelog_file, description_file, wrath_compat = $*
 unless addon_name && new_version && zip_file && changelog_file && description_file
 	puts "Usage: addon_name, new_version, zip_file, changelog_file, description_file"
 	exit 1
@@ -124,6 +124,7 @@ Net::HTTP.start("www.wowinterface.com") do |http|
 		"message" => description,
 		"changelog" => changelog,
 		"replacementfile" => file,
+		"wgp" => (wrath_compat == "--wrath" ? "1" : "0"),
 	}
 
 	query, headers = prepare_query(params)
