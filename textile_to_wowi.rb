@@ -28,6 +28,12 @@ unless pledgie_url and pledgie_img
 	exit 1
 end
 
+preblocks = []
+readme.gsub!(/<pre>(.*?)<\/pre>/m) do |match|
+	preblocks << $1
+	"PRETOKEN"
+end
+
 [ # Purge single newlines
 	[/<br\s?\/?>/, 'BREAKTOKEN'],
 	[/([^\n])\n([^\n#*])/, '\1 \2'],
@@ -98,5 +104,6 @@ pledgie = "\n\n[URL='#{pledgie_url}'][IMG]#{pledgie_img}[/IMG][/URL]"
 	[/\n\n+\s?/, "\n\n"]
 ].each {|pair| readme.gsub!(pair[0], pair[1])}
 
+readme.gsub!("PRETOKEN") {|match| "[CODE]" + preblocks.delete_at(0) + "[/CODE]"}
 
 puts readme
