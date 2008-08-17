@@ -75,9 +75,9 @@ cp changelog.txt /c/Users/Tekkub/Desktop/$addon-$version-changelog.txt
 echo "Pushing to origin"
 git-push --tags origin $currentbranch
 
-echo ""
-echo "Uploading to Google Code"
-/C/Program\ Files/Python25/python /c/Users/Tekkub/bin/googlecode_upload.py -s "$addon-$version" -p "tekkub-wow" -l "Addon-$addon, Quality-$QUAL, TOC-$TOC" /c/Users/Tekkub/Desktop/$addon-$version.zip
+#~ echo ""
+#~ echo "Uploading to Google Code"
+#~ /C/Program\ Files/Python25/python /c/Users/Tekkub/bin/googlecode_upload.py -s "$addon-$version" -p "tekkub-wow" -l "Addon-$addon, Quality-$QUAL, TOC-$TOC" /c/Users/Tekkub/Desktop/$addon-$version.zip
 
 echo ""
 echo "Uploading to WoWI"
