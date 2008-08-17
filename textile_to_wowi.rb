@@ -86,7 +86,7 @@ pledgie = "\n\n[URL='#{pledgie_url}'][IMG]#{pledgie_img}[/IMG][/URL]"
 	[/<a href="([^"]*)(.*)<\/a>">/, '[URL=\1]\2[/URL]'],
 	[/"([^"]+)":(http:\/\/[^\s,]+)/, '[URL=\2]\1[/URL]'],
 	[/<code>(.*)<\/code>/, '[COLOR="Teal"]\1[/COLOR]'],
-	[/@(.*)@/, '[COLOR="Teal"]\1[/COLOR]'],
+	[/@([^@]+)@/, '[COLOR="Teal"]\1[/COLOR]'],
 	[/h2\. (.*)/, '[size=3][b]\1[/b][/size]'],
 	[/<b>(.*)<\/b>/, '[B]\1[/B]'],
 	#~ [/\*([^*]*)\*/, '[B]\1[/B]'],
