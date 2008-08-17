@@ -1,5 +1,6 @@
 #! /bin/bash
 
+
 if ! git-status | grep "nothing to commit (working directory clean)" > /dev/null
 then
 	echo "---- Cannot tag, you have uncommitted changes ----"
@@ -11,6 +12,26 @@ then
 	echo "---- No README.textile found ----"
 	exit 1
 fi
+
+wrath="$1"
+if [ "$wrath" == "--wrath" ]
+then
+	TOC="30000"
+	VERTAG="3.0.1"
+else
+	TOC="20400"
+	VERTAG="2.4.3"
+fi
+
+for toc in `/bin/find -name "*.toc"`
+do
+	sed "s/\(.*\)Interface: .*/\1Interface: $TOC/" $toc > newtoc
+	mv newtoc $toc
+	git-add $toc
+	sleep 1
+done
+
+git commit -m "Updating TOC to $TOC"
 
 lasttag=`git-describe --tags --abbrev=0 HEAD`
 if [ $lasttag ]
@@ -26,8 +47,7 @@ fi
 echo "Quality? "
 read -e QUAL
 
-TOC="20400"
-version="2.4.2.$VER"
+version="$VERTAG.$VER"
 tagname="$version-$QUAL"
 
 currentbranch=`sed "s/ref: refs\/heads\///" .git/HEAD`
@@ -81,6 +101,6 @@ git-push --tags origin $currentbranch
 
 echo ""
 echo "Uploading to WoWI"
-ruby /c/Users/Tekkub/bin/wowi_upload.rb $addon $tagname /c/Users/Tekkub/Desktop/$addon-$version.zip /c/Users/Tekkub/Desktop/$addon-$version-changelog.txt /c/Users/Tekkub/Desktop/$addon-$version-description.txt
+ruby /c/Users/Tekkub/bin/wowi_upload.rb $addon $tagname /c/Users/Tekkub/Desktop/$addon-$version.zip /c/Users/Tekkub/Desktop/$addon-$version-changelog.txt /c/Users/Tekkub/Desktop/$addon-$version-description.txt $wrath
 
 exit 0
