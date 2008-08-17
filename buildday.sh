@@ -14,7 +14,7 @@ do
 	if [ $lasttag ]
 	then
 		revcount=0
-		for commit in `git-rev-list $lasttag..HEAD`
+		for commit in `git-rev-list --no-merges $lasttag..HEAD`
 		do
 			let "revcount += 1"
 		done
@@ -23,7 +23,7 @@ do
 		then
 			echo ""
 			echo "---- $mydir has had $revcount commits since tag $lasttag ----"
-			git-log $lasttag..master --pretty=format:"%h (%cr) - %s" | cat
+			git-log $lasttag..HEAD --no-merges --pretty=format:"%h (%cr) - %s" | cat
 			echo ""
 		fi
 	else
@@ -37,7 +37,7 @@ do
 		then
 			echo ""
 			echo "---- $mydir has $revcount commits ----"
-			git-log master --pretty=format:"%h (%cr) - %s" | cat
+			git-log HEAD --no-merges --pretty=format:"%h (%cr) - %s" | cat
 			echo ""
 		fi
 	fi
