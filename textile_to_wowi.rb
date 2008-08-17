@@ -49,7 +49,7 @@ readme.gsub!( LISTS_RE ) do |match|
 				if depth.last.length > tl.length
 					(depth.length - 1).downto(0) do |i|
 						break if depth[i].length == tl.length
-						lines[line_id - 1] << "\n[/LIST#{depth[i] =~ /\#$/ ? '=1' : ''}]"
+						lines[line_id - 1] << "\n[/LIST]"
 						depth.pop
 					end
 				end
@@ -67,7 +67,7 @@ readme.gsub!( LISTS_RE ) do |match|
 		end
 		if line_id - last_line > 1 or line_id == lines.length - 1
 			depth.delete_if do |v|
-				lines[last_line] << "\n[/LIST#{v =~ /\#$/ ? '=1' : ''}]"
+				lines[last_line] << "\n[/LIST]"
 			end
 		end
 	end
