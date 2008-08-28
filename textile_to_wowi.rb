@@ -84,6 +84,7 @@ end
 github = "Alpha builds can be found on [url=#{github_project}]github[/url].\n"
 pledgie = "\n\n[URL='#{pledgie_url}'][IMG]#{pledgie_img}[/IMG][/URL]"
 [
+	[/^%\{clear:right; float:right\}[^%]+%\n\n/m, ''],
 	[/<b>(Visit .* mailinglist).?<\/b>/m, '[SIZE=2][B][COLOR=SandyBrown]\1[/COLOR][/B][/SIZE]'],
 	[/<p\s?[^>]*>/, ''],
 	["</p>", ''],
